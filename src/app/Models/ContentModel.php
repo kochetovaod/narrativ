@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Contracts\RequiresMediaCustomProperties;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Oddvalue\LaravelDrafts\Concerns\HasDrafts;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 use Wildside\Userstamps\Userstamps;
@@ -13,7 +16,7 @@ use Wildside\Userstamps\Userstamps;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
-abstract class ContentModel extends Model implements HasMedia
+abstract class ContentModel extends Model implements HasMedia, RequiresMediaCustomProperties
 {
     use HasDrafts;
     use HasFactory;
@@ -35,6 +38,28 @@ abstract class ContentModel extends Model implements HasMedia
      * @var array<string, array<int, string>>
      */
     protected array $draftablePivotAttributes = [];
+
+    protected static function booted(): void
+    {
+        static::saving(function (self $model) {
+            Validator::make(
+                $model->attributesToArray(),
+                [
+                    'title' => ['required', 'string', 'max:255'],
+                    'slug' => [
+                        'required',
+                        'string',
+                        'max:255',
+                        Rule::unique($model->getTable(), 'slug')->ignore($model),
+                    ],
+                    'seo_title' => ['nullable', 'string', 'max:255'],
+                    'seo_description' => ['nullable', 'string'],
+                    'is_published' => ['boolean'],
+                    'published_at' => ['nullable', 'date'],
+                ],
+            )->validate();
+        });
+    }
 
     /**
      * The attributes that are mass assignable.
@@ -103,5 +128,17 @@ abstract class ContentModel extends Model implements HasMedia
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('images');
+    }
+
+    public function requiredMediaCustomProperties(string $collectionName): array
+    {
+        if ($collectionName === 'images') {
+            return [
+                'alt' => ['required', 'string', 'max:255'],
+                'title' => ['required', 'string', 'max:255'],
+            ];
+        }
+
+        return [];
     }
 }
