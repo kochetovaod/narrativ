@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Auth\ActiveUserProvider;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -19,6 +21,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Auth::provider('eloquent_active', function ($app, array $config) {
+            return new ActiveUserProvider($app['hash'], $config['model']);
+        });
     }
 }
