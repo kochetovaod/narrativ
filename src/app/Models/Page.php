@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\LogsActivityChanges;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Oddvalue\LaravelDrafts\Concerns\HasDrafts;
 use Wildside\Userstamps\Userstamps;
@@ -10,6 +11,7 @@ use Z3d0X\FilamentFabricator\Models\Page as FabricatorPage;
 class Page extends FabricatorPage
 {
     use HasDrafts;
+    use LogsActivityChanges;
     use SoftDeletes;
     use Userstamps;
 

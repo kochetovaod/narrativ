@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Contracts\RequiresMediaCustomProperties;
+use App\Models\Concerns\LogsActivityChanges;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -20,6 +21,7 @@ abstract class ContentModel extends Model implements HasMedia, RequiresMediaCust
 {
     use HasDrafts;
     use HasFactory;
+    use LogsActivityChanges;
     use InteractsWithMedia;
     use HasSlug;
     use SoftDeletes;

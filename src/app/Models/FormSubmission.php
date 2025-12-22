@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\LogsActivityChanges;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -18,6 +19,7 @@ class FormSubmission extends Model implements HasMedia
 {
     use HasFactory;
     use InteractsWithMedia;
+    use LogsActivityChanges;
     use SoftDeletes;
 
     public const STATUS_NEW = 'new';
@@ -40,6 +42,16 @@ class FormSubmission extends Model implements HasMedia
         'status',
         'payload',
         'meta',
+        'reply_to',
+        'is_spam',
+    ];
+
+    /**
+     * @var list<string>
+     */
+    protected array $activitylogAttributes = [
+        'form_id',
+        'status',
         'reply_to',
         'is_spam',
     ];

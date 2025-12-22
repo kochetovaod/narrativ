@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\LogsActivityChanges;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -11,6 +12,7 @@ use Wildside\Userstamps\Userstamps;
 class Form extends Model
 {
     use HasFactory;
+    use LogsActivityChanges;
     use SoftDeletes;
     use Userstamps;
 

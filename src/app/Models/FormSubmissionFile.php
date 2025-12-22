@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\LogsActivityChanges;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -10,6 +11,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 class FormSubmissionFile extends Model
 {
     use HasFactory;
+    use LogsActivityChanges;
 
     /**
      * @var list<string>
