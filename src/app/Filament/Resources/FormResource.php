@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\FormResource\Pages;
 use App\Filament\Resources\FormResource\RelationManagers\FormFieldsRelationManager;
 use App\Filament\Resources\FormResource\RelationManagers\FormSubmissionsRelationManager;
+use App\Enums\Permission;
 use App\Models\Form;
 use Filament\Forms;
 use Filament\Forms\Components\Section;
@@ -16,6 +17,7 @@ use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Auth;
 
 class FormResource extends Resource
 {
@@ -134,13 +136,17 @@ class FormResource extends Resource
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
                 Tables\Actions\RestoreAction::make(),
-                Tables\Actions\ForceDeleteAction::make(),
+                Tables\Actions\ForceDeleteAction::make()
+                    ->visible(fn () => static::canForceDelete())
+                    ->authorize(fn () => static::canForceDelete()),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                     Tables\Actions\RestoreBulkAction::make(),
-                    Tables\Actions\ForceDeleteBulkAction::make(),
+                    Tables\Actions\ForceDeleteBulkAction::make()
+                        ->visible(fn () => static::canForceDelete())
+                        ->authorize(fn () => static::canForceDelete()),
                 ]),
             ])
             ->defaultSort('title');
@@ -167,5 +173,10 @@ class FormResource extends Resource
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);
+    }
+
+    protected static function canForceDelete(): bool
+    {
+        return Auth::user()?->can(Permission::ForceDeleteContent->value) ?? false;
     }
 }

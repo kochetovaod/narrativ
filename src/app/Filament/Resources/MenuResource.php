@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\MenuResource\Pages;
 use App\Filament\Resources\MenuResource\RelationManagers\MenuItemsRelationManager;
+use App\Enums\Permission;
 use App\Models\Menu;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -11,6 +12,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\Auth;
 
 class MenuResource extends Resource
 {
@@ -67,13 +69,17 @@ class MenuResource extends Resource
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
                 Tables\Actions\RestoreAction::make(),
-                Tables\Actions\ForceDeleteAction::make(),
+                Tables\Actions\ForceDeleteAction::make()
+                    ->visible(fn () => static::canForceDelete())
+                    ->authorize(fn () => static::canForceDelete()),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                     Tables\Actions\RestoreBulkAction::make(),
-                    Tables\Actions\ForceDeleteBulkAction::make(),
+                    Tables\Actions\ForceDeleteBulkAction::make()
+                        ->visible(fn () => static::canForceDelete())
+                        ->authorize(fn () => static::canForceDelete()),
                 ]),
             ])
             ->defaultSort('name');
@@ -91,5 +97,10 @@ class MenuResource extends Resource
         return [
             'index' => Pages\ManageMenus::route('/'),
         ];
+    }
+
+    protected static function canForceDelete(): bool
+    {
+        return Auth::user()?->can(Permission::ForceDeleteContent->value) ?? false;
     }
 }

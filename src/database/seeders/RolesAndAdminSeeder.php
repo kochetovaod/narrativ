@@ -2,22 +2,36 @@
 
 namespace Database\Seeders;
 
+use App\Enums\Permission;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Permission as PermissionModel;
 use Spatie\Permission\Models\Role;
 
 class RolesAndAdminSeeder extends Seeder
 {
     public function run(): void
     {
+        $guard = config('permission.default_guard');
+
+        foreach (Permission::cases() as $permission) {
+            PermissionModel::findOrCreate($permission->value, $guard);
+        }
+
         $roles = [
-            'super_admin',
-            'admin',
+            'super_admin' => Permission::values(),
+            'admin' => [
+                Permission::AccessAdminPanel->value,
+                Permission::PublishContent->value,
+                Permission::UnpublishContent->value,
+                Permission::PreviewContent->value,
+            ],
         ];
 
-        foreach ($roles as $role) {
-            Role::findOrCreate($role, config('permission.default_guard'));
+        foreach ($roles as $role => $permissions) {
+            $createdRole = Role::findOrCreate($role, $guard);
+            $createdRole->syncPermissions($permissions);
         }
 
         $adminEmail = env('ADMIN_EMAIL', 'admin@example.com');

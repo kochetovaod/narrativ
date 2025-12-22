@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\Permission;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Section;
@@ -188,17 +189,21 @@ abstract class ContentResource extends Resource
                 ->label('Публиковать')
                 ->icon('heroicon-o-check')
                 ->requiresConfirmation()
-                ->visible(fn (Model $record) => ! $record->is_published)
+                ->visible(fn (Model $record) => static::canPublish() && ! $record->is_published)
+                ->authorize(fn () => static::canPublish())
                 ->action(fn (Model $record) => static::publishRecord($record)),
             Tables\Actions\Action::make('unpublish')
                 ->label('Снять с публикации')
                 ->icon('heroicon-o-x-mark')
                 ->requiresConfirmation()
-                ->visible(fn (Model $record) => (bool) $record->is_published)
+                ->visible(fn (Model $record) => static::canUnpublish() && (bool) $record->is_published)
+                ->authorize(fn () => static::canUnpublish())
                 ->action(fn (Model $record) => static::unpublishRecord($record)),
             Tables\Actions\DeleteAction::make(),
             Tables\Actions\RestoreAction::make(),
-            Tables\Actions\ForceDeleteAction::make(),
+            Tables\Actions\ForceDeleteAction::make()
+                ->visible(fn () => static::canForceDelete())
+                ->authorize(fn () => static::canForceDelete()),
         ];
     }
 
@@ -214,16 +219,22 @@ abstract class ContentResource extends Resource
                 ->label('Публиковать')
                 ->icon('heroicon-o-check')
                 ->requiresConfirmation()
+                ->visible(fn () => static::canPublish())
+                ->authorize(fn () => static::canPublish())
                 ->action(fn (Collection $records) => $records->each(fn (Model $record) => static::publishRecord($record))),
             BulkAction::make('unpublish')
                 ->label('Снять с публикации')
                 ->icon('heroicon-o-x-mark')
                 ->requiresConfirmation()
+                ->visible(fn () => static::canUnpublish())
+                ->authorize(fn () => static::canUnpublish())
                 ->action(fn (Collection $records) => $records->each(fn (Model $record) => static::unpublishRecord($record))),
             BulkActionGroup::make([
                 Tables\Actions\DeleteBulkAction::make(),
                 Tables\Actions\RestoreBulkAction::make(),
-                Tables\Actions\ForceDeleteBulkAction::make(),
+                Tables\Actions\ForceDeleteBulkAction::make()
+                    ->visible(fn () => static::canForceDelete())
+                    ->authorize(fn () => static::canForceDelete()),
             ]),
         ];
     }
@@ -248,7 +259,8 @@ abstract class ContentResource extends Resource
         return Action::make('preview')
             ->label('Предпросмотр')
             ->icon('heroicon-o-eye')
-            ->visible(fn () => Auth::check())
+            ->visible(fn () => static::canPreview())
+            ->authorize(fn () => static::canPreview())
             ->url(fn (Model $record) => static::getPreviewUrl($record))
             ->openUrlInNewTab();
     }
@@ -266,5 +278,25 @@ abstract class ContentResource extends Resource
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);
+    }
+
+    protected static function canPublish(): bool
+    {
+        return Auth::user()?->can(Permission::PublishContent->value) ?? false;
+    }
+
+    protected static function canUnpublish(): bool
+    {
+        return Auth::user()?->can(Permission::UnpublishContent->value) ?? false;
+    }
+
+    protected static function canPreview(): bool
+    {
+        return Auth::user()?->can(Permission::PreviewContent->value) ?? false;
+    }
+
+    protected static function canForceDelete(): bool
+    {
+        return Auth::user()?->can(Permission::ForceDeleteContent->value) ?? false;
     }
 }
