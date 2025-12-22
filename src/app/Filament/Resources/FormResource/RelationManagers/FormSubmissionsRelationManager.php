@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\FormResource\RelationManagers;
 
+use App\Enums\Permission;
 use App\Models\FormSubmission;
 use Filament\Forms;
 use Filament\Forms\Components\KeyValue;
@@ -14,6 +15,7 @@ use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 
 class FormSubmissionsRelationManager extends RelationManager
 {
@@ -134,13 +136,17 @@ class FormSubmissionsRelationManager extends RelationManager
                     ]),
                 Tables\Actions\DeleteAction::make(),
                 Tables\Actions\RestoreAction::make(),
-                Tables\Actions\ForceDeleteAction::make(),
+                Tables\Actions\ForceDeleteAction::make()
+                    ->visible(fn () => $this->canForceDelete())
+                    ->authorize(fn () => $this->canForceDelete()),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                     Tables\Actions\RestoreBulkAction::make(),
-                    Tables\Actions\ForceDeleteBulkAction::make(),
+                    Tables\Actions\ForceDeleteBulkAction::make()
+                        ->visible(fn () => $this->canForceDelete())
+                        ->authorize(fn () => $this->canForceDelete()),
                     Tables\Actions\BulkAction::make('export')
                         ->label('Экспорт CSV')
                         ->icon('heroicon-o-arrow-down-tray')
@@ -185,5 +191,10 @@ class FormSubmissionsRelationManager extends RelationManager
         return response()->streamDownload(function () use ($csv) {
             echo $csv;
         }, 'submissions.csv');
+    }
+
+    protected function canForceDelete(): bool
+    {
+        return Auth::user()?->can(Permission::ForceDeleteContent->value) ?? false;
     }
 }
