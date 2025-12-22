@@ -10,10 +10,14 @@ use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 use Wildside\Userstamps\Userstamps;
 
-abstract class ContentModel extends Model
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+
+abstract class ContentModel extends Model implements HasMedia
 {
     use HasDrafts;
     use HasFactory;
+    use InteractsWithMedia;
     use HasSlug;
     use SoftDeletes;
     use Userstamps;
@@ -59,6 +63,21 @@ abstract class ContentModel extends Model
         ];
     }
 
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function editor()
+    {
+        return $this->belongsTo(User::class, 'updated_by');
+    }
+
+    public function deleter()
+    {
+        return $this->belongsTo(User::class, 'deleted_by');
+    }
+
     public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
@@ -79,5 +98,10 @@ abstract class ContentModel extends Model
                     ->whereNull('published_at')
                     ->orWhere('published_at', '<=', now());
             });
+    }
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('images');
     }
 }
