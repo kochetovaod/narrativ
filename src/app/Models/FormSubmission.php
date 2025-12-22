@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -52,6 +54,30 @@ class FormSubmission extends Model implements HasMedia
             'meta' => 'array',
             'is_spam' => 'boolean',
         ];
+    }
+
+    protected static function booted(): void
+    {
+        static::saving(function (self $submission) {
+            Validator::make(
+                [
+                    'form_id' => $submission->form_id,
+                    'status' => $submission->status,
+                    'payload' => $submission->payload,
+                    'meta' => $submission->meta,
+                    'reply_to' => $submission->reply_to,
+                    'is_spam' => $submission->is_spam,
+                ],
+                [
+                    'form_id' => ['required', 'integer', 'exists:forms,id'],
+                    'status' => ['required', Rule::in(array_keys(self::STATUS_LABELS))],
+                    'payload' => ['required', 'array'],
+                    'meta' => ['nullable', 'array'],
+                    'reply_to' => ['nullable', 'email', 'max:255'],
+                    'is_spam' => ['boolean'],
+                ],
+            )->validate();
+        });
     }
 
     public function form(): BelongsTo
