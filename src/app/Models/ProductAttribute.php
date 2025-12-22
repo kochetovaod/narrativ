@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\LogsActivityChanges;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Sluggable\HasSlug;
@@ -11,6 +12,7 @@ class ProductAttribute extends Model
 {
     use HasFactory;
     use HasSlug;
+    use LogsActivityChanges;
 
     /**
      * @var list<string>
