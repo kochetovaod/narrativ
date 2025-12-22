@@ -1,0 +1,21 @@
+{
+    "name": "Laravel (Docker Compose)",
+    "dockerComposeFile": [
+        "../docker-compose.yml"
+    ],
+    "service": "app",
+    "workspaceFolder": "/var/www/html/src",
+    "shutdownAction": "stopCompose",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "bmewburn.vscode-intelephense-client",
+                "xdebug.php-debug",
+                "onecentlin.laravel-blade",
+                "amiralizadeh9480.laravel-extra-intellisense",
+                "esbenp.prettier-vscode"
+            ]
+        }
+    },
+    "postCreateCommand": "composer -V && php -v && node -v && npm -v"
+}
