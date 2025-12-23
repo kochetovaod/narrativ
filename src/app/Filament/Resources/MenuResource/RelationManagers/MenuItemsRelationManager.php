@@ -16,6 +16,7 @@ use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
@@ -118,9 +119,20 @@ class MenuItemsRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('title')
             ->reorderable('sort_order')
+            ->reorderRecordsTriggerAction(fn (Action $action) => $action
+                ->label('Изменить порядок')
+                ->icon('heroicon-m-arrows-up-down')
+                ->tooltip('Переключите режим сортировки и перетаскивайте пункты, чтобы поменять порядок и вложенность.'),
+            )
+            ->modifyQueryUsing(fn ($query) => $query
+                ->with('parent')
+                ->orderBy('parent_id')
+                ->orderBy('sort_order'),
+            )
             ->columns([
                 Tables\Columns\TextColumn::make('title')
                     ->label('Название')
+                    ->formatStateUsing(fn (string $state, MenuItem $record) => sprintf('%s%s', str_repeat('— ', $record->getDepth()), $state))
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\BadgeColumn::make('link_type')
