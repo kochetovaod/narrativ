@@ -270,6 +270,80 @@
             </main>
         </div>
 
+        @php($contactSettings = app(\App\Settings\ContactSettings::class))
+        <section class="mt-16 max-w-5xl mx-auto px-6 lg:px-8">
+            <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-8 shadow-sm">
+                <h2 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">{{ $contactSettings->contact_form_title }}</h2>
+                @if ($contactSettings->contact_form_description)
+                    <p class="mt-2 text-gray-600 dark:text-gray-300">{{ $contactSettings->contact_form_description }}</p>
+                @endif
+
+                <form class="mt-6 grid grid-cols-1 gap-4" method="POST" action="{{ route('forms.submit', ['form' => 'contact']) }}">
+                    @csrf
+
+                    <label class="block">
+                        <span class="text-sm font-medium text-gray-700 dark:text-gray-200">{{ data_get($contactSettings->contact_form_fields, 'name.label') }}</span>
+                        <input
+                            class="mt-1 w-full rounded-lg border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
+                            type="text"
+                            name="name"
+                            placeholder="{{ data_get($contactSettings->contact_form_fields, 'name.placeholder') }}"
+                            @if (data_get($contactSettings->contact_form_fields, 'name.required')) required @endif
+                        >
+                    </label>
+
+                    <label class="block">
+                        <span class="text-sm font-medium text-gray-700 dark:text-gray-200">{{ data_get($contactSettings->contact_form_fields, 'email.label') }}</span>
+                        <input
+                            class="mt-1 w-full rounded-lg border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
+                            type="email"
+                            name="email"
+                            placeholder="{{ data_get($contactSettings->contact_form_fields, 'email.placeholder') }}"
+                            @if (data_get($contactSettings->contact_form_fields, 'email.required')) required @endif
+                        >
+                    </label>
+
+                    <label class="block">
+                        <span class="text-sm font-medium text-gray-700 dark:text-gray-200">{{ data_get($contactSettings->contact_form_fields, 'phone.label') }}</span>
+                        <input
+                            class="mt-1 w-full rounded-lg border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
+                            type="tel"
+                            name="phone"
+                            placeholder="{{ data_get($contactSettings->contact_form_fields, 'phone.placeholder') }}"
+                            @if (data_get($contactSettings->contact_form_fields, 'phone.required')) required @endif
+                        >
+                    </label>
+
+                    @if ($contactSettings->contact_form_enable_honeypot)
+                        <div class="sr-only">
+                            <label>
+                                <span>Компания</span>
+                                <input type="text" name="company">
+                            </label>
+                        </div>
+                    @endif
+
+                    @if ($contactSettings->contact_form_enable_turnstile && config('services.turnstile.site_key'))
+                        <div class="cf-turnstile" data-sitekey="{{ config('services.turnstile.site_key') }}"></div>
+                    @endif
+
+                    <div>
+                        <button
+                            type="submit"
+                            class="inline-flex items-center justify-center rounded-lg bg-orange-600 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-orange-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500"
+                        >
+                            Отправить
+                        </button>
+                        <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">{{ $contactSettings->contact_form_success_message }}</p>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        @if ($contactSettings->contact_form_enable_turnstile && config('services.turnstile.site_key'))
+            <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+        @endif
+
         @if (Route::has('login'))
             <div class="h-14.5 hidden lg:block"></div>
         @endif

@@ -81,6 +81,81 @@ class SiteSettings extends Page implements HasForms
                             ->columnSpanFull(),
                     ])
                     ->columns(2),
+                Section::make('Форма обратной связи')
+                    ->description('Настройки публичной формы для контактов и обратной связи.')
+                    ->schema([
+                        Forms\Components\TextInput::make('contacts.contact_form_title')
+                            ->label('Заголовок формы')
+                            ->required()
+                            ->maxLength(255),
+                        Forms\Components\Textarea::make('contacts.contact_form_description')
+                            ->label('Описание')
+                            ->rows(2)
+                            ->columnSpanFull(),
+                        Forms\Components\Fieldset::make('Поле «Имя»')
+                            ->schema([
+                                Forms\Components\TextInput::make('contacts.contact_form_fields.name.label')
+                                    ->label('Label')
+                                    ->required()
+                                    ->maxLength(255),
+                                Forms\Components\TextInput::make('contacts.contact_form_fields.name.placeholder')
+                                    ->label('Placeholder')
+                                    ->maxLength(255),
+                                Forms\Components\Toggle::make('contacts.contact_form_fields.name.required')
+                                    ->label('Обязательное')
+                                    ->default(true),
+                            ])
+                            ->columns(3),
+                        Forms\Components\Fieldset::make('Поле «Email»')
+                            ->schema([
+                                Forms\Components\TextInput::make('contacts.contact_form_fields.email.label')
+                                    ->label('Label')
+                                    ->required()
+                                    ->maxLength(255),
+                                Forms\Components\TextInput::make('contacts.contact_form_fields.email.placeholder')
+                                    ->label('Placeholder')
+                                    ->maxLength(255),
+                                Forms\Components\Toggle::make('contacts.contact_form_fields.email.required')
+                                    ->label('Обязательное')
+                                    ->default(true),
+                            ])
+                            ->columns(3),
+                        Forms\Components\Fieldset::make('Поле «Телефон»')
+                            ->schema([
+                                Forms\Components\TextInput::make('contacts.contact_form_fields.phone.label')
+                                    ->label('Label')
+                                    ->required()
+                                    ->maxLength(255),
+                                Forms\Components\TextInput::make('contacts.contact_form_fields.phone.placeholder')
+                                    ->label('Placeholder')
+                                    ->maxLength(255),
+                                Forms\Components\Toggle::make('contacts.contact_form_fields.phone.required')
+                                    ->label('Обязательное')
+                                    ->default(false),
+                            ])
+                            ->columns(3),
+                        Forms\Components\TextInput::make('contacts.contact_form_email_subject')
+                            ->label('Тема письма для заявок')
+                            ->required()
+                            ->maxLength(255),
+                        Forms\Components\Textarea::make('contacts.contact_form_success_message')
+                            ->label('Ответ пользователю после отправки')
+                            ->rows(3)
+                            ->required()
+                            ->columnSpanFull(),
+                        Forms\Components\Toggle::make('contacts.contact_form_enable_turnstile')
+                            ->label('Включить Cloudflare Turnstile')
+                            ->helperText('Ключи читаются из .env (TURNSTILE_SITE_KEY/SECRET_KEY).')
+                            ->default(config('services.turnstile.enabled', false)),
+                        Forms\Components\Toggle::make('contacts.contact_form_enable_honeypot')
+                            ->label('Включить honeypot')
+                            ->helperText('Использует настройку HONEYPOT_ENABLED по умолчанию.')
+                            ->default(config('services.honeypot.enabled', true)),
+                        Forms\Components\Placeholder::make('contacts.turnstile_site_key')
+                            ->label('Turnstile site key (.env)')
+                            ->content(config('services.turnstile.site_key') ?: 'Не задан'),
+                    ])
+                    ->columns(2),
                 Section::make('О нас')
                     ->schema([
                         Forms\Components\RichEditor::make('about.text')
