@@ -11,7 +11,7 @@
 [x] **Рефакторинг в сторону DDD и модульности: разделить код на домены: Каталог (Products, Categories, Attributes), Контент (News, Portfolio, Services, Capabilities), Формы, Меню, Настройки и Пользователи. Внутри каждого домена выделить слой приложения (Actions/Services) и слой инфраструктуры (Models/Repositories). Например, создать класс app/Domains/Catalog/Actions/PublishProduct.php для публикации товара и аналогичные классы для снятия с публикации.**
     *Создать структуру каталогов app/Domains/* и перенести соответствующие классы. Создать классы Action и DTO (например, app/Domains/Forms/Data/FormSubmissionData.php) и использовать их в контроллерах/ресурсах.*
 
-[] **Добавить управление пользователями: создать ресурс UserResource для админ‑панели, позволяющий управлять пользователями, ролями (Spatie Roles & Permissions), полем is_active и сменой пароля.**
+[x] **Добавить управление пользователями: создать ресурс UserResource для админ‑панели, позволяющий управлять пользователями, ролями (Spatie Roles & Permissions), полем is_active и сменой пароля.**
     *Команда php artisan make:filament-resource User --generate с дальнейшим редактированием UserResource (формы и таблицы). В формах добавить поля: имя, email, пароль, роли (SelectMultiple), флаг активности. В таблице добавить действия «блокировать/разблокировать».*
 
 [] **Создать ресурсы для атрибутов товаров: добавить управляемые через Filament сущности ProductAttribute и ProductAttributeValue, а также менеджеры связей с категориями и товарами. Потребуется редактирование pivot‑полей: sort_order, number_value, bool_value.**
