@@ -68,4 +68,9 @@ class MenuItem extends Model
     {
         return $this->hasMany(MenuItem::class, 'parent_id')->orderBy('sort_order');
     }
+
+    public function getDepth(): int
+    {
+        return $this->parent ? 1 + $this->parent->getDepth() : 0;
+    }
 }
