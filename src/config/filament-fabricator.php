@@ -78,7 +78,7 @@ return [
      * The page filament resource to be used by the package.
      * Replace this if you ever extend it
      */
-    'page-resource' => \Z3d0X\FilamentFabricator\Resources\PageResource::class,
+    'page-resource' => App\Filament\Resources\PageResource::class,
 
     /**
      * Whether you want to have a view page as part of your PageResource
