@@ -25,7 +25,7 @@ class FormSubmissionData
             $submission->status,
             (bool) $submission->is_spam,
             $submission->reply_to,
-            $submission->payload ?? [],
+            $submission->orderedPayload(),
             $submission->meta,
             $submission->created_at,
         );
