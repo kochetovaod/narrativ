@@ -6,6 +6,7 @@ use App\Domains\Catalog\Actions\PublishProduct;
 use App\Domains\Catalog\Actions\UnpublishProduct;
 use Illuminate\Database\Eloquent\Model;
 use App\Filament\Resources\ProductResource\Pages;
+use App\Filament\Resources\ProductResource\RelationManagers\PortfolioProjectsRelationManager;
 use App\Domains\Catalog\Models\Product;
 use Filament\Forms;
 use Filament\Forms\Components\RichEditor;
@@ -65,12 +66,6 @@ class ProductResource extends ContentResource
                             ->label('Сортировка')
                             ->numeric()
                             ->default(0),
-                        Forms\Components\Select::make('portfolioProjects')
-                            ->label('Проекты портфолио')
-                            ->relationship('portfolioProjects', 'title')
-                            ->multiple()
-                            ->preload()
-                            ->columnSpanFull(),
                     ])
                     ->columns(2),
                 static::mediaSection(),
@@ -104,6 +99,13 @@ class ProductResource extends ContentResource
     {
         return [
             'index' => Pages\ManageProducts::route('/'),
+        ];
+    }
+
+    public static function getRelations(): array
+    {
+        return [
+            PortfolioProjectsRelationManager::class,
         ];
     }
 }

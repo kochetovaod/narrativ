@@ -17,7 +17,7 @@
 [x] **Создать ресурсы для атрибутов товаров: добавить управляемые через Filament сущности ProductAttribute и ProductAttributeValue, а также менеджеры связей с категориями и товарами. Потребуется редактирование pivot‑полей: sort_order, number_value, bool_value.**
     *Использовать команды: php artisan make:filament-resource ProductAttribute --generate и php artisan make:filament-resource ProductAttributeValue --generate. Создать BelongsToManyRelationManager для привязки атрибутов к категориям и значений к товарам (с дополнительными полями).*
 
-[] **Поддержка сортировки в M:N связях: в проектах портфолио связи с товарами и услугами используют поле sort_order. Формы ресурсов пока позволяют лишь выбрать связанные элементы без указания порядка.**
+[x] **Поддержка сортировки в M:N связях: в проектах портфолио связи с товарами и услугами используют поле sort_order. Формы ресурсов пока позволяют лишь выбрать связанные элементы без указания порядка.**
     *Создать BelongsToManyRelationManager (например, ProductPortfolioRelationManager), где в таблице отобразить поле sort_order и разрешить inline‑редактирование. Аналогично для ServicePortfolioRelationManager. Обновить PortfolioProjectResource и ProductResource для использования этих менеджеров.*
 
 ## Доработка CRUD и функционала (P0/P1)
