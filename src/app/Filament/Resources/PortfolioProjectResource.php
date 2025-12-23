@@ -3,7 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\PortfolioProjectResource\Pages;
-use App\Models\PortfolioProject;
+use App\Domains\Content\Models\PortfolioProject;
 use Filament\Forms;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\RichEditor;

@@ -2,14 +2,14 @@
 
 namespace Tests\Feature;
 
-use App\Models\Form;
-use App\Models\FormSubmission;
-use App\Models\Menu;
-use App\Models\Product;
-use App\Models\ProductAttribute;
-use App\Models\ProductAttributeValue;
-use App\Models\ProductCategory;
-use App\Models\Service;
+use App\Domains\Catalog\Models\Product;
+use App\Domains\Catalog\Models\ProductAttribute;
+use App\Domains\Catalog\Models\ProductAttributeValue;
+use App\Domains\Catalog\Models\ProductCategory;
+use App\Domains\Content\Models\Service;
+use App\Domains\Forms\Models\Form;
+use App\Domains\Forms\Models\FormSubmission;
+use App\Domains\Menu\Models\Menu;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;

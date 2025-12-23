@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Models;
+namespace App\Domains\Shared\Models;
 
 use App\Contracts\RequiresMediaCustomProperties;
-use App\Models\Concerns\LogsActivityChanges;
+use App\Domains\Shared\Concerns\LogsActivityChanges;
+use App\Domains\Users\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;

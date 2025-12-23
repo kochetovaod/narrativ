@@ -2,10 +2,10 @@
 
 namespace Tests\Feature;
 
-use App\Models\Form;
-use App\Models\FormSubmission;
-use App\Models\Service;
-use App\Models\User;
+use App\Domains\Content\Models\Service;
+use App\Domains\Forms\Models\Form;
+use App\Domains\Forms\Models\FormSubmission;
+use App\Domains\Users\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Spatie\Activitylog\Models\Activity;
 use Tests\TestCase;

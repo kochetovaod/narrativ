@@ -1,23 +1,39 @@
 <?php
 
-namespace App\Models;
+namespace App\Domains\Catalog\Models;
 
-class Service extends ContentModel
+use App\Domains\Content\Models\PortfolioProject;
+use App\Domains\Shared\Models\ContentModel;
+
+class Product extends ContentModel
 {
     /**
      * @var list<string>
      */
     protected $fillable = [
+        'product_category_id',
         'title',
         'slug',
         'seo_title',
         'seo_description',
         'short_description',
         'content',
+        'sku',
+        'filters',
         'sort_order',
         'is_published',
         'published_at',
     ];
+
+    /**
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return array_merge(parent::casts(), [
+            'filters' => 'array',
+        ]);
+    }
 
     /**
      * @var array<int, string>
@@ -32,6 +48,11 @@ class Service extends ContentModel
     protected array $draftablePivotAttributes = [
         'portfolioProjects' => ['sort_order'],
     ];
+
+    public function category()
+    {
+        return $this->belongsTo(ProductCategory::class, 'product_category_id');
+    }
 
     public function portfolioProjects()
     {

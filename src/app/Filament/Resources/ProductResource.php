@@ -2,8 +2,11 @@
 
 namespace App\Filament\Resources;
 
+use App\Domains\Catalog\Actions\PublishProduct;
+use App\Domains\Catalog\Actions\UnpublishProduct;
+use Illuminate\Database\Eloquent\Model;
 use App\Filament\Resources\ProductResource\Pages;
-use App\Models\Product;
+use App\Domains\Catalog\Models\Product;
 use Filament\Forms;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Section;
@@ -85,6 +88,16 @@ class ProductResource extends ContentResource
             ->actions(static::tableActions())
             ->bulkActions(static::tableBulkActions())
             ->defaultSort('title');
+    }
+
+    protected static function publishRecord(Model $record): void
+    {
+        app(PublishProduct::class)($record);
+    }
+
+    protected static function unpublishRecord(Model $record): void
+    {
+        app(UnpublishProduct::class)($record);
     }
 
     public static function getPages(): array

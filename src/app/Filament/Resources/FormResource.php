@@ -6,7 +6,7 @@ use App\Filament\Resources\FormResource\Pages;
 use App\Filament\Resources\FormResource\RelationManagers\FormFieldsRelationManager;
 use App\Filament\Resources\FormResource\RelationManagers\FormSubmissionsRelationManager;
 use App\Enums\Permission;
-use App\Models\Form;
+use App\Domains\Forms\Models\Form;
 use Filament\Forms;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Form;

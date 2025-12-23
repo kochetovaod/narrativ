@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Models;
+namespace App\Domains\Content\Models;
 
 use App\Contracts\RequiresMediaCustomProperties;
-use App\Models\Concerns\LogsActivityChanges;
+use App\Domains\Shared\Concerns\LogsActivityChanges;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Oddvalue\LaravelDrafts\Concerns\HasDrafts;
 use Spatie\MediaLibrary\HasMedia;

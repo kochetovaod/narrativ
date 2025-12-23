@@ -1,6 +1,9 @@
 <?php
 
-namespace App\Models;
+namespace App\Domains\Content\Models;
+
+use App\Domains\Catalog\Models\Product;
+use App\Domains\Shared\Models\ContentModel;
 
 class PortfolioProject extends ContentModel
 {

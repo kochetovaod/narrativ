@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use App\Enums\Permission;
-use App\Models\User;
+use App\Domains\Users\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Permission as PermissionModel;

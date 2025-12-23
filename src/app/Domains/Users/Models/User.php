@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Models;
+namespace App\Domains\Users\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Enums\Permission;
-use App\Models\Concerns\LogsActivityChanges;
+use App\Domains\Shared\Concerns\LogsActivityChanges;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

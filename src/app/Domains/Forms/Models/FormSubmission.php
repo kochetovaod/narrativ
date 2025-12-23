@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Models;
+namespace App\Domains\Forms\Models;
 
-use App\Models\Concerns\LogsActivityChanges;
+use App\Domains\Shared\Concerns\LogsActivityChanges;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;

@@ -3,13 +3,13 @@
 namespace App\Filament\Resources\MenuResource\RelationManagers;
 
 use App\Enums\Permission;
-use App\Models\Capability;
-use App\Models\MenuItem;
-use App\Models\News;
-use App\Models\PortfolioProject;
-use App\Models\Product;
-use App\Models\ProductCategory;
-use App\Models\Service;
+use App\Domains\Catalog\Models\Product;
+use App\Domains\Catalog\Models\ProductCategory;
+use App\Domains\Content\Models\Capability;
+use App\Domains\Content\Models\News;
+use App\Domains\Content\Models\PortfolioProject;
+use App\Domains\Content\Models\Service;
+use App\Domains\Menu\Models\MenuItem;
 use Filament\Forms;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Form;

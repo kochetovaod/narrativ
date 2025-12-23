@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources;
 
+use App\Domains\Content\Actions\PublishContentEntry;
+use App\Domains\Content\Actions\UnpublishContentEntry;
 use App\Enums\Permission;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Placeholder;
@@ -241,17 +243,12 @@ abstract class ContentResource extends Resource
 
     protected static function publishRecord(Model $record): void
     {
-        $record->forceFill([
-            'is_published' => true,
-            'published_at' => $record->published_at ?? now(),
-        ])->save();
+        app(PublishContentEntry::class)($record);
     }
 
     protected static function unpublishRecord(Model $record): void
     {
-        $record->forceFill([
-            'is_published' => false,
-        ])->save();
+        app(UnpublishContentEntry::class)($record);
     }
 
     protected static function previewAction(): Action
