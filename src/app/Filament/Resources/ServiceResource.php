@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\ServiceResource\Pages;
+use App\Filament\Resources\ServiceResource\RelationManagers\PortfolioProjectsRelationManager;
 use App\Domains\Content\Models\Service;
 use Filament\Forms;
 use Filament\Forms\Components\RichEditor;
@@ -71,6 +72,13 @@ class ServiceResource extends ContentResource
     {
         return [
             'index' => Pages\ManageServices::route('/'),
+        ];
+    }
+
+    public static function getRelations(): array
+    {
+        return [
+            PortfolioProjectsRelationManager::class,
         ];
     }
 }

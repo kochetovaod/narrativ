@@ -3,6 +3,8 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\PortfolioProjectResource\Pages;
+use App\Filament\Resources\PortfolioProjectResource\RelationManagers\ProductsRelationManager;
+use App\Filament\Resources\PortfolioProjectResource\RelationManagers\ServicesRelationManager;
 use App\Domains\Content\Models\PortfolioProject;
 use Filament\Forms;
 use Filament\Forms\Components\DatePicker;
@@ -55,18 +57,6 @@ class PortfolioProjectResource extends ContentResource
                             ->label('Сортировка')
                             ->numeric()
                             ->default(0),
-                        Forms\Components\Select::make('products')
-                            ->label('Товары')
-                            ->relationship('products', 'title')
-                            ->multiple()
-                            ->preload()
-                            ->columnSpanFull(),
-                        Forms\Components\Select::make('services')
-                            ->label('Услуги')
-                            ->relationship('services', 'title')
-                            ->multiple()
-                            ->preload()
-                            ->columnSpanFull(),
                     ])
                     ->columns(2),
                 static::mediaSection(),
@@ -90,6 +80,14 @@ class PortfolioProjectResource extends ContentResource
     {
         return [
             'index' => Pages\ManagePortfolioProjects::route('/'),
+        ];
+    }
+
+    public static function getRelations(): array
+    {
+        return [
+            ProductsRelationManager::class,
+            ServicesRelationManager::class,
         ];
     }
 }
