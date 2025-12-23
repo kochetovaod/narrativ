@@ -14,7 +14,7 @@
 [x] **Добавить управление пользователями: создать ресурс UserResource для админ‑панели, позволяющий управлять пользователями, ролями (Spatie Roles & Permissions), полем is_active и сменой пароля.**
     *Команда php artisan make:filament-resource User --generate с дальнейшим редактированием UserResource (формы и таблицы). В формах добавить поля: имя, email, пароль, роли (SelectMultiple), флаг активности. В таблице добавить действия «блокировать/разблокировать».*
 
-[] **Создать ресурсы для атрибутов товаров: добавить управляемые через Filament сущности ProductAttribute и ProductAttributeValue, а также менеджеры связей с категориями и товарами. Потребуется редактирование pivot‑полей: sort_order, number_value, bool_value.**
+[x] **Создать ресурсы для атрибутов товаров: добавить управляемые через Filament сущности ProductAttribute и ProductAttributeValue, а также менеджеры связей с категориями и товарами. Потребуется редактирование pivot‑полей: sort_order, number_value, bool_value.**
     *Использовать команды: php artisan make:filament-resource ProductAttribute --generate и php artisan make:filament-resource ProductAttributeValue --generate. Создать BelongsToManyRelationManager для привязки атрибутов к категориям и значений к товарам (с дополнительными полями).*
 
 [] **Поддержка сортировки в M:N связях: в проектах портфолио связи с товарами и услугами используют поле sort_order. Формы ресурсов пока позволяют лишь выбрать связанные элементы без указания порядка.**
