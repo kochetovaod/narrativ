@@ -44,6 +44,7 @@ class FormSubmissionsRelationManager extends RelationManager
                     ->maxLength(255),
                 KeyValue::make('payload')
                     ->label('Payload')
+                    ->formatStateUsing(fn (FormSubmission $record): array => $record->orderedPayload())
                     ->disabled()
                     ->columnSpanFull(),
                 KeyValue::make('meta')

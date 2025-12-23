@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\Permission;
+use App\Http\Controllers\FormSubmissionController;
 use App\Http\Controllers\PreviewController;
 use Illuminate\Support\Facades\Route;
 
@@ -15,3 +16,6 @@ Route::middleware(['auth', 'permission:' . Permission::PreviewContent->value, 'n
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::post('/forms/{form:slug}/submit', FormSubmissionController::class)
+    ->name('forms.submit');

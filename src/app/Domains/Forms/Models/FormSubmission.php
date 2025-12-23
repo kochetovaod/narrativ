@@ -135,4 +135,35 @@ class FormSubmission extends Model implements HasMedia
     {
         return $this->created_at;
     }
+
+    public function orderedPayload(): array
+    {
+        $payload = $this->payload ?? [];
+
+        if (! $this->relationLoaded('form')) {
+            $this->load('form');
+        }
+
+        $fields = $this->form?->fields()
+            ->orderBy('sort_order')
+            ->get() ?? collect();
+
+        $ordered = [];
+
+        foreach ($fields as $field) {
+            if (array_key_exists($field->name, $payload)) {
+                $ordered[$field->label ?? $field->name] = $payload[$field->name];
+            }
+        }
+
+        foreach ($payload as $name => $value) {
+            if ($fields->firstWhere('name', $name) !== null) {
+                continue;
+            }
+
+            $ordered[$name] = $value;
+        }
+
+        return $ordered;
+    }
 }
