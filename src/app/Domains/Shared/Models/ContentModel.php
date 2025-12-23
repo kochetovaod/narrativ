@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Oddvalue\LaravelDrafts\Concerns\HasDrafts;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
@@ -45,6 +46,8 @@ abstract class ContentModel extends Model implements HasMedia, RequiresMediaCust
     protected static function booted(): void
     {
         static::saving(function (self $model) {
+            $model->applySeoDefaults();
+
             Validator::make(
                 $model->attributesToArray(),
                 [
@@ -62,6 +65,30 @@ abstract class ContentModel extends Model implements HasMedia, RequiresMediaCust
                 ],
             )->validate();
         });
+    }
+
+    protected function applySeoDefaults(): void
+    {
+        if (blank($this->seo_title) && filled($this->title)) {
+            $this->seo_title = $this->title;
+        }
+
+        if (blank($this->seo_description)) {
+            $descriptionSource = collect([
+                $this->short_description ?? null,
+                $this->excerpt ?? null,
+                $this->description ?? null,
+                $this->content ?? null,
+            ])
+                ->filter()
+                ->map(fn (mixed $value) => is_string($value) ? trim(strip_tags($value)) : null)
+                ->filter()
+                ->first();
+
+            if (filled($descriptionSource)) {
+                $this->seo_description = Str::limit($descriptionSource, 160);
+            }
+        }
     }
 
     /**
