@@ -107,6 +107,7 @@ class SubmitFormAction
         }
 
         SendFormSubmissionNotificationJob::dispatch($submission);
+        SendFormSubmissionWebhookJob::dispatch($submission);
 
         return $submission;
     }
