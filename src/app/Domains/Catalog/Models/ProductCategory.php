@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Models;
+namespace App\Domains\Catalog\Models;
+
+use App\Domains\Shared\Models\ContentModel;
 
 class ProductCategory extends ContentModel
 {

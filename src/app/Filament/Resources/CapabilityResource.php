@@ -3,7 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\CapabilityResource\Pages;
-use App\Models\Capability;
+use App\Domains\Content\Models\Capability;
 use Filament\Forms;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Section;

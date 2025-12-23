@@ -3,7 +3,11 @@
 namespace App\Filament\Resources\FormResource\RelationManagers;
 
 use App\Enums\Permission;
-use App\Models\FormSubmission;
+use App\Domains\Forms\Actions\MarkSubmissionAsSpam;
+use App\Domains\Forms\Actions\RestoreSubmissionFromSpam;
+use App\Domains\Forms\Actions\UpdateSubmissionStatus;
+use App\Domains\Forms\Data\FormSubmissionData;
+use App\Domains\Forms\Models\FormSubmission;
 use Filament\Forms;
 use Filament\Forms\Components\KeyValue;
 use Filament\Forms\Form;
@@ -104,12 +108,12 @@ class FormSubmissionsRelationManager extends RelationManager
                     ->label('Пометить как спам')
                     ->visible(fn (FormSubmission $record) => ! $record->is_spam)
                     ->requiresConfirmation()
-                    ->action(fn (FormSubmission $record) => $record->markAsSpam()),
+                    ->action(fn (FormSubmission $record) => app(MarkSubmissionAsSpam::class)($record)),
                 Tables\Actions\Action::make('unmark_spam')
                     ->label('Убрать из спама')
                     ->visible(fn (FormSubmission $record) => $record->is_spam)
                     ->requiresConfirmation()
-                    ->action(fn (FormSubmission $record) => $record->markAsNotSpam()),
+                    ->action(fn (FormSubmission $record) => app(RestoreSubmissionFromSpam::class)($record)),
                 Tables\Actions\Action::make('set_status')
                     ->label('Сменить статус')
                     ->form([
@@ -118,7 +122,7 @@ class FormSubmissionsRelationManager extends RelationManager
                             ->options(FormSubmission::STATUS_LABELS)
                             ->required(),
                     ])
-                    ->action(fn (FormSubmission $record, array $data) => $record->update(['status' => $data['status']])),
+                    ->action(fn (FormSubmission $record, array $data) => app(UpdateSubmissionStatus::class)($record, $data['status'])),
                 Tables\Actions\ViewAction::make()
                     ->label('Детали')
                     ->form([
@@ -159,17 +163,8 @@ class FormSubmissionsRelationManager extends RelationManager
     protected function exportSubmissions(Collection $records)
     {
         $rows = $records
-            ->map(function (FormSubmission $submission) {
-                return [
-                    'id' => $submission->id,
-                    'status' => FormSubmission::STATUS_LABELS[$submission->status] ?? $submission->status,
-                    'is_spam' => $submission->is_spam ? 'yes' : 'no',
-                    'reply_to' => $submission->reply_to,
-                    'payload' => json_encode($submission->payload),
-                    'meta' => json_encode($submission->meta),
-                    'created_at' => $submission->created_at,
-                ];
-            })
+            ->map(fn (FormSubmission $submission) => FormSubmissionData::fromModel($submission))
+            ->map(fn (FormSubmissionData $data) => $data->toExportRow())
             ->prepend([
                 'id' => 'ID',
                 'status' => 'Status',

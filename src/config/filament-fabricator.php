@@ -72,7 +72,7 @@ return [
      * The page model to be used by the package.
      * Replace this if you ever extend it
      */
-    'page-model' => App\Models\Page::class,
+    'page-model' => App\Domains\Content\Models\Page::class,
 
     /**
      * The page filament resource to be used by the package.

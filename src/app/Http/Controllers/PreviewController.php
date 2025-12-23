@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Capability;
-use App\Models\News;
-use App\Models\Page;
-use App\Models\PortfolioProject;
-use App\Models\Product;
-use App\Models\ProductCategory;
-use App\Models\Service;
+use App\Domains\Catalog\Models\Product;
+use App\Domains\Catalog\Models\ProductCategory;
+use App\Domains\Content\Models\Capability;
+use App\Domains\Content\Models\News;
+use App\Domains\Content\Models\Page;
+use App\Domains\Content\Models\PortfolioProject;
+use App\Domains\Content\Models\Service;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\JsonResponse;

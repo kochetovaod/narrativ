@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Concerns;
+namespace App\Domains\Shared\Concerns;
 
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
